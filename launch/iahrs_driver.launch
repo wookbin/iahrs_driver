@@ -1,0 +1,6 @@
+<?xml version="1.0"?>
+<launch>
+  <node pkg="iahrs_driver" type="iahrs_driver" name="iahrs_driver" output="screen" />
+
+
+</launch>
