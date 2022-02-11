@@ -44,6 +44,8 @@ KERNEL=="ttyUSB*", ATTRS{idVendor}=="0403", ATTRS{idProduct}=="6015", ATTRS{seri
 
 	$ sudo service udev restart
 
+
+![rules](https://user-images.githubusercontent.com/58063370/153543247-8c446c45-bcab-4ec5-ac96-2550942f5915.PNG)
 -	심볼릭 등록의 확인. (아래와 같은 명령어를  호출하면 위의 그림처럼 ttyUSB가 IMU로 고정된 것을 볼 수 있어요 .)
 	$ ll /dev/
  
