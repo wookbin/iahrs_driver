@@ -39,7 +39,7 @@ USB Port에 대한 권한은 ‘sudo chmod 777 ttyUSB0’ 명령어를 통해서
 
 KERNEL=="ttyUSB*", ATTRS{idVendor}=="0403", ATTRS{idProduct}=="6015", ATTRS{serial}=="DM03L0C6", MODE:="0666", GROUP:="dialout", SYMLINK+="IMU"
 
--	udev 재시작 명령어를 호출한 후에 PC의 재 시작을 해주어야 적용이 된다.
+-	udev 재시작 명령어를 호출한 후에 PC의 재 시작을 해주어야 적용 됩니다.
 
 	$ sudo service udev restart
 
@@ -50,4 +50,24 @@ KERNEL=="ttyUSB*", ATTRS{idVendor}=="0403", ATTRS{idProduct}=="6015", ATTRS{seri
 	$ ll /dev/
  
 
+===[사용하기]====================================
+
+1) roslaunch 하기
+
+	$ roslaunch iahrs_driver iahrs_driver.launch 
+
+2) imu topic확인하기
+
+	$ rostopic echo /imu/data 
+![222](https://user-images.githubusercontent.com/58063370/153544313-3acc1524-badf-4e7c-af9f-bcf0700ac4e6.PNG)
+
+3) rviz를 사용하여 확인하기
+
+	$ rviz
+
+- rviz화면을 아래와 같이 설정
+![rviz_setting](https://user-images.githubusercontent.com/58063370/153546094-76292dd3-dbd8-4e89-9d9c-5242887af163.PNG)
+
+- 동작에 대한 gif file은 아래와 같이~~~
+![ezgif com-crop](https://user-images.githubusercontent.com/58063370/153545614-95801ac6-b86e-4bd2-b46b-3aff10e58a9d.gif)
 
