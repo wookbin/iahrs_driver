@@ -69,7 +69,7 @@ KERNEL=="ttyUSB*", ATTRS{idVendor}=="0403", ATTRS{idProduct}=="6015", ATTRS{seri
 
 ![rviz_setting](https://user-images.githubusercontent.com/58063370/153546094-76292dd3-dbd8-4e89-9d9c-5242887af163.PNG)
 
-- 동작에 대한 gif file은 아래와 같이~~~
+- 동작에 대한 영상은 바로 아래~~~
 
 ![ezgif com-crop](https://user-images.githubusercontent.com/58063370/153545614-95801ac6-b86e-4bd2-b46b-3aff10e58a9d.gif)
 
