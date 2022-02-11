@@ -26,7 +26,7 @@ USB Port에 대한 권한은 ‘sudo chmod 777 ttyUSB0’ 명령어를 통해서
 
 	$ lsusb
 
-	$ udevadm info -a /dev/ttyUSB0 | grep '{serial}'
+	$ udevadm info -a /dev/ttyUSB0 | grep '{serial}'  <-- 저는 처음에 iAHRS가 ttyUSB0으로 잡혀서 이렇게 했어요. 만약 번호가 다르면 그 번호를 입력하세요.
  
 ![id](https://user-images.githubusercontent.com/58063370/153543765-2284bc56-23ce-4a3d-b261-c855f3ec5089.PNG)
  
