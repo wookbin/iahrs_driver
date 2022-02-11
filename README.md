@@ -29,14 +29,14 @@ USB Port에 대한 권한은 ‘sudo chmod 777 ttyUSB0’ 명령어를 통해서
 
 	$ udevadm info -a /dev/ttyUSB0 | grep '{serial}'
  
-![id](https://user-images.githubusercontent.com/58063370/153542658-0047a36c-f3cf-416c-af7c-6c00916924b6.PNG)
+![id](https://user-images.githubusercontent.com/58063370/153543765-2284bc56-23ce-4a3d-b261-c855f3ec5089.PNG)
  
 위에 출력된 정보가 USB to Serial Device의 Serial Number이며, 해당 번호는 제품별로 다를 수도 있습니다.
 
 
 -	알아낸 정보를 이용한 .rules file생성.
 
-‘IMU.rules’ 파일을 ‘/etc/udev/rules.d’ 경로에 생성한 후에 해당 파일의 내용을 아래와 같이 작성한 후 저장한다.
+‘IMU.rules’ 파일을 ‘/etc/udev/rules.d’ 경로에 생성한 후에 해당 파일의 내용을 아래와 같이 작성한 후 저장.
 
 KERNEL=="ttyUSB*", ATTRS{idVendor}=="0403", ATTRS{idProduct}=="6015", ATTRS{serial}=="DM03L0C6", MODE:="0666", GROUP:="dialout", SYMLINK+="IMU"
 
@@ -47,6 +47,7 @@ KERNEL=="ttyUSB*", ATTRS{idVendor}=="0403", ATTRS{idProduct}=="6015", ATTRS{seri
 
 ![rules](https://user-images.githubusercontent.com/58063370/153543247-8c446c45-bcab-4ec5-ac96-2550942f5915.PNG)
 -	심볼릭 등록의 확인. (아래와 같은 명령어를  호출하면 위의 그림처럼 ttyUSB가 IMU로 고정된 것을 볼 수 있어요 .)
+
 	$ ll /dev/
  
 
