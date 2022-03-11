@@ -194,10 +194,10 @@ void my_handler(sig_atomic_t s)
 int main (int argc, char** argv)
 {
 	signal(SIGINT,my_handler);
-    ros::init(argc, argv, "iahrs_driver");
+    	ros::init(argc, argv, "iahrs_driver");
 
 	ros::NodeHandle private_node_handle("~");
-    private_node_handle.param<double>("time_offset_in_seconds", time_offset_in_seconds, 0.0);
+    	private_node_handle.param<double>("time_offset_in_seconds", time_offset_in_seconds, 0.0);
 	
 	ros::param::get("tf_prefix", tf_prefix_);
 
@@ -218,12 +218,12 @@ int main (int argc, char** argv)
 	imu_data_msg.orientation_covariance[4] = 0.011*(M_PI/180.0);
 	imu_data_msg.orientation_covariance[8] = 0.006*(M_PI/180.0);
 
-    ros::NodeHandle nh;
+    	ros::NodeHandle nh;
 	ros::Publisher imu_data_pub = nh.advertise<sensor_msgs::Imu>("imu/data", 1);
 
 
-    ros::Rate loop_rate(100); //HZ
-	serial_open();
+    	ros::Rate loop_rate(100); //HZ
+    	serial_open();
 
 	SendRecv("ra\n", dSend_Data, 10);	// Euler -> '0.0' Reset
 	usleep(10000);
