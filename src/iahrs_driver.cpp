@@ -198,6 +198,8 @@ int main (int argc, char** argv)
 
 	ros::NodeHandle private_node_handle("~");
     private_node_handle.param<double>("time_offset_in_seconds", time_offset_in_seconds, 0.0);
+	
+	ros::param::get("tf_prefix", tf_prefix_);
 
 	tf::TransformBroadcaster br;
   	tf::Transform transform;
