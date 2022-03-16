@@ -240,8 +240,10 @@ int main (int argc, char** argv)
 		{
 			const int max_data = 10;
 			double data[max_data];
+			int no_data = 0;
 
-			int no_data = SendRecv("q\n", data, max_data);	// Read Quaternion
+			/*
+			no_data = SendRecv("q\n", data, max_data);	// Read Quaternion
 			if (no_data >= 4) 
 			{
 				//printf("Quaternion = %f, %f, %f, %f\n", data[0], data[1], data[2], data[3]); //(r , v0 , v1 , v2)
@@ -253,6 +255,7 @@ int main (int argc, char** argv)
 				imu_data_msg.orientation.w = _pIMU_data.dQuaternion_w = data[0];
 
 			}
+			*/
 
 			no_data = SendRecv("g\n", data, max_data);	// Read angular_velocity _ wx, wy, wz 
 			if (no_data >= 3) 
@@ -282,7 +285,13 @@ int main (int argc, char** argv)
 				_pIMU_data.dEuler_angle_Yaw	  = data[2]*(M_PI/180.0);
 			}
 
-			//todo...
+			//editing_
+			tf::Quaternion orientation = tf::createQuaternionFromRPY(_pIMU_data.dEuler_angle_Roll , _pIMU_data.dEuler_angle_Pitch, _pIMU_data.dEuler_angle_Yaw);
+			// orientation
+			imu_data_msg.orientation.x = orientation[0];
+			imu_data_msg.orientation.y = orientation[1];
+			imu_data_msg.orientation.z = orientation[2];
+			imu_data_msg.orientation.w = orientation[3];
 
 			// calculate measurement time
             ros::Time measurement_time = ros::Time::now() + ros::Duration(time_offset_in_seconds);
