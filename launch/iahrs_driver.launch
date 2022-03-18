@@ -1,6 +1,5 @@
 <?xml version="1.0"?>
 <launch>
+  <param name="m_bSingle_TF_option" type="bool" value="true" /> <!--false-->
   <node pkg="iahrs_driver" type="iahrs_driver" name="iahrs_driver" output="screen" />
-
-
 </launch>
