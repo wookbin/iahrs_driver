@@ -54,6 +54,8 @@ double m_dRoll, m_dPitch, m_dYaw;
 sensor_msgs::Imu imu_data_msg;
 //tf_prefix add
 std::string tf_prefix_;
+//single_used TF
+bool m_bSingle_TF_option = false;
 
 
 int serial_open ()
@@ -220,15 +222,13 @@ int main (int argc, char** argv)
 
     	ros::NodeHandle nh;
 	ros::Publisher imu_data_pub = nh.advertise<sensor_msgs::Imu>("imu/data", 1);
-
+	
+	nh.getParam("m_bSingle_TF_option", m_bSingle_TF_option);
+    	printf("##m_bSingle_TF_option: %d \n", m_bSingle_TF_option);
 
     	ros::Rate loop_rate(100); //HZ
     	serial_open();
 
-	SendRecv("ra\n", dSend_Data, 10);	// Euler -> '0.0' Reset
-	usleep(10000);
-	SendRecv("rp\n", dSend_Data, 10);	// Position & Velocity ->'0.0' Reset
-	usleep(10000);
 	SendRecv("za\n", dSend_Data, 10);	// Euler Angle -> '0.0' Reset
 	usleep(10000);
 
@@ -241,21 +241,6 @@ int main (int argc, char** argv)
 			const int max_data = 10;
 			double data[max_data];
 			int no_data = 0;
-
-			/*
-			no_data = SendRecv("q\n", data, max_data);	// Read Quaternion
-			if (no_data >= 4) 
-			{
-				//printf("Quaternion = %f, %f, %f, %f\n", data[0], data[1], data[2], data[3]); //(r , v0 , v1 , v2)
-
-				// orientation
-				imu_data_msg.orientation.x = _pIMU_data.dQuaternion_x = data[1];
-				imu_data_msg.orientation.y = _pIMU_data.dQuaternion_y = data[2];
-				imu_data_msg.orientation.z = _pIMU_data.dQuaternion_z = data[3];
-				imu_data_msg.orientation.w = _pIMU_data.dQuaternion_w = data[0];
-
-			}
-			*/
 
 			no_data = SendRecv("g\n", data, max_data);	// Read angular_velocity _ wx, wy, wz 
 			if (no_data >= 3) 
@@ -294,7 +279,7 @@ int main (int argc, char** argv)
 			imu_data_msg.orientation.w = orientation[3];
 
 			// calculate measurement time
-            ros::Time measurement_time = ros::Time::now() + ros::Duration(time_offset_in_seconds);
+            		ros::Time measurement_time = ros::Time::now() + ros::Duration(time_offset_in_seconds);
 
 			imu_data_msg.header.stamp = measurement_time;
 			imu_data_msg.header.frame_id = tf_prefix_ + "/imu_link";  // "imu_link"
@@ -303,12 +288,15 @@ int main (int argc, char** argv)
 			imu_data_pub.publish(imu_data_msg);
 
 			//Publish tf
-			transform.setOrigin( tf::Vector3(0.0, 0.0, 0.0) );
-			tf::Quaternion q;
-			q.setRPY(_pIMU_data.dEuler_angle_Roll, _pIMU_data.dEuler_angle_Pitch, _pIMU_data.dEuler_angle_Yaw);
-			transform.setRotation(q);
-			//br.sendTransform(tf::StampedTransform(transform, ros::Time::now(), "base_link", "imu_link"));
-			br.sendTransform(tf::StampedTransform(transform, ros::Time::now(), tf_prefix_ + "/base_link", tf_prefix_ + "/imu_link"));
+			if(m_bSingle_TF_option)
+			{
+				transform.setOrigin( tf::Vector3(0.0, 0.0, 0.2) );
+				tf::Quaternion q;
+				q.setRPY(_pIMU_data.dEuler_angle_Roll, _pIMU_data.dEuler_angle_Pitch, _pIMU_data.dEuler_angle_Yaw);
+				transform.setRotation(q);
+				//br.sendTransform(tf::StampedTransform(transform, ros::Time::now(), "base_link", "imu_link"));
+				br.sendTransform(tf::StampedTransform(transform, ros::Time::now(), tf_prefix_ + "/base_link", tf_prefix_ + "/imu_link"));
+			}
 
 
 		}
