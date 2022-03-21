@@ -1,0 +1,5 @@
+#This message is used to send command to IAHRS(IMU)
+#Reboot Sensor command
+
+---
+bool command_Result
