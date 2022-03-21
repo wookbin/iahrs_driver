@@ -7,6 +7,13 @@
 #include <geometry_msgs/TransformStamped.h>
 #include <geometry_msgs/Quaternion.h>
 
+//Service_include...
+#include "iahrs_driver/all_data_reset.h"
+#include "iahrs_driver/euler_angle_init.h"
+#include "iahrs_driver/euler_angle_reset.h"
+#include "iahrs_driver/pose_velocity_reset.h"
+#include "iahrs_driver/reboot_sensor.h"
+
 #include <math.h>
 #include <stdio.h>
 #include <stdlib.h>
@@ -22,7 +29,7 @@
 #include <dirent.h>
 #include <signal.h>
 
-#define SERIAL_PORT			"/dev/IMU"
+#define SERIAL_PORT		"/dev/IMU"
 #define SERIAL_SPEED		B115200
 
 typedef struct IMU_DATA
@@ -57,6 +64,17 @@ std::string tf_prefix_;
 //single_used TF
 bool m_bSingle_TF_option = false;
 
+//IMU_service
+ros::ServiceServer all_data_reset_service;
+iahrs_driver::all_data_reset all_data_reset_cmd;
+ros::ServiceServer euler_angle_init_service;
+iahrs_driver::euler_angle_init euler_angle_init_cmd;
+ros::ServiceServer euler_angle_reset_service;
+iahrs_driver::euler_angle_reset euler_angle_reset_cmd;
+ros::ServiceServer pose_velocity_reset_service;
+iahrs_driver::pose_velocity_reset pose_velocity_reset_cmd;
+ros::ServiceServer reboot_sensor_service;
+iahrs_driver::reboot_sensor reboot_sensor_cmd;
 
 int serial_open ()
 {
@@ -192,6 +210,72 @@ void my_handler(sig_atomic_t s)
     exit(1); 
 }
 
+//ROS Service Callback////////////////////////////////////////////////////////////////////////
+bool All_Data_Reset_Command(iahrs_driver::all_data_reset::Request  &req, 
+					    	iahrs_driver::all_data_reset::Response &res)
+{
+	bool bResult = false;
+
+    double dSend_Data[10];
+	SendRecv("rc\n", dSend_Data, 10);
+
+    bResult = true;
+	res.command_Result = bResult;
+	return true;
+}
+
+bool Euler_Angle_Init_Command(iahrs_driver::euler_angle_init::Request  &req, 
+					    	  iahrs_driver::euler_angle_init::Response &res)
+{
+	bool bResult = false;
+
+    double dSend_Data[10];
+	SendRecv("za\n", dSend_Data, 10);
+
+    bResult = true;
+	res.command_Result = bResult;
+	return true;
+}
+
+bool Euler_Angle_Reset_Command(iahrs_driver::euler_angle_reset::Request  &req, 
+					    	   iahrs_driver::euler_angle_reset::Response &res)
+{
+	bool bResult = false;
+
+    double dSend_Data[10];
+	SendRecv("ra\n", dSend_Data, 10);
+
+    bResult = true;
+	res.command_Result = bResult;
+	return true;
+}
+
+bool Pose_Velocity_Reset_Command(iahrs_driver::pose_velocity_reset::Request  &req, 
+					    	     iahrs_driver::pose_velocity_reset::Response &res)
+{
+	bool bResult = false;
+
+    double dSend_Data[10];
+	SendRecv("rp\n", dSend_Data, 10);
+
+    bResult = true;
+	res.command_Result = bResult;
+	return true;
+}
+
+bool Reboot_Sensor_Command(iahrs_driver::reboot_sensor::Request  &req, 
+					       iahrs_driver::reboot_sensor::Response &res)
+{
+	bool bResult = false;
+
+    double dSend_Data[10];
+	SendRecv("rd\n", dSend_Data, 10);
+
+    bResult = true;
+	res.command_Result = bResult;
+	return true;
+}
+
 
 int main (int argc, char** argv)
 {
@@ -222,6 +306,14 @@ int main (int argc, char** argv)
 
     	ros::NodeHandle nh;
 	ros::Publisher imu_data_pub = nh.advertise<sensor_msgs::Imu>("imu/data", 1);
+	
+	//IMU Service///////////////////////////////////////////////////////////////////////////////////////////////
+    	ros::NodeHandle sh;
+    	all_data_reset_service = sh.advertiseService("all_data_reset_cmd", All_Data_Reset_Command);
+	euler_angle_init_service = sh.advertiseService("euler_angle_init_cmd", Euler_Angle_Init_Command);
+	euler_angle_reset_service = sh.advertiseService("euler_angle_reset_cmd", Euler_Angle_Reset_Command);
+	pose_velocity_reset_service = sh.advertiseService("pose_velocity_reset_cmd", Pose_Velocity_Reset_Command);
+	reboot_sensor_service = sh.advertiseService("reboot_sensor_cmd", Reboot_Sensor_Command);
 	
 	nh.getParam("m_bSingle_TF_option", m_bSingle_TF_option);
     	printf("##m_bSingle_TF_option: %d \n", m_bSingle_TF_option);
