@@ -73,3 +73,15 @@ KERNEL=="ttyUSB*", ATTRS{idVendor}=="0403", ATTRS{idProduct}=="6015", ATTRS{seri
 
 ![ezgif com-crop](https://user-images.githubusercontent.com/58063370/153545614-95801ac6-b86e-4bd2-b46b-3aff10e58a9d.gif)
 
+
+4) 사용 가능한 서비스 (Input: 없음)
+- all_data_reset_cmd : 모든 보정 데이터 초기화(c=9)
+
+- euler_angle_init_cmd: 현재 Euler angle을 0위치로 설정(c=5)
+
+- euler_angle_reset_cmd: Euler angle초기화 (c=7)
+
+- pose_velocity_reset_cmd: 위치와 속도 초기화 (c=8)
+
+- reboot_sensor_cmd: 센서 재시작(c=99)
+
