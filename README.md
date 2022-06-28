@@ -10,7 +10,7 @@ USB Port에 대한 권한은 ‘sudo chmod 777 ttyUSB0’ 명령어를 통해서
 
 	sudo usermod -a -G dialout $USER
 
-* 위의 명령어를 실행 후 PC의 재 시작을 해야 적용되요.
+
  
 2)	ttyUSB rule의 설정을 위한 심볼릭 링크 ttyUSBx만들기
 
